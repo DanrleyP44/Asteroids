@@ -32,6 +32,7 @@ def main():
         screen.blit(img, (x, y))
 
     score = 0
+    life = 3
 
 
     while True:
@@ -46,9 +47,14 @@ def main():
 
         for ast in asteroids:
             if ast.collides_with(player):
-                log_event("player_hit")
-                print("Game Over!")
-                sys.exit()
+                if player.hit():
+                    log_event("player_hit")
+                    life -= 1
+
+                    if life <= 0:
+                        print("Game Over!")
+                        sys.exit()
+
             for shot in shots:
                 if shot.collides_with(ast):
                     log_event("asteroid_shot")
@@ -62,8 +68,9 @@ def main():
 
         screen.fill("black")
         text_score = f"Score: {score}"
+        text_life = f"Life: {life}"
         draw_text(text_score, text_font, (255, 255, 255), 0, 0)
-        draw_text("Life: 3", text_font, (255, 255, 255), 1210, 0)
+        draw_text(text_life, text_font, (255, 255, 255), 1210, 0)
 
         for d in drawable:
             d.draw(screen)

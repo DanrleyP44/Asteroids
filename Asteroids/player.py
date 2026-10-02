@@ -9,6 +9,10 @@ class Player(CircleShape):
         self.rotation = 0
         self.cooldown_timer = 0
 
+        self.collision_immune = False
+        self.collision_time = 0
+        self.immunity_duration = 3000
+
     #Draws the triangle
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -50,3 +54,15 @@ class Player(CircleShape):
     def shoot(self):
         new_shot = Shot(self.position.x, self.position.y)
         new_shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+    def hit(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.collision_immune:
+            if current_time - self.collision_time < self.immunity_duration:
+                return False
+            self.collision_immune = False
+
+        self.collision_immune = True
+        self.collision_time = current_time
+
+        return True
