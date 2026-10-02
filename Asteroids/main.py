@@ -32,10 +32,7 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-
-
         updatable.update(dt)
-
 
 
         for ast in asteroids:
@@ -43,6 +40,12 @@ def main():
                 log_event("player_hit")
                 print("Game Over!")
                 sys.exit()
+            for shot in shots:
+                if shot.collides_with(ast):
+                    log_event("asteroid_shot")
+                    shot.kill()
+                    ast.split()
+
 
         screen.fill("black")
 
